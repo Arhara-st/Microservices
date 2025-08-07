@@ -1,0 +1,30 @@
+databaseChangeLog:
+- changeSet:
+    id: create-messages_from_service_b-table
+    author: vadim
+    changes:
+      - createTable:
+          tableName: messages_from_service_b
+          columns:
+            - column:
+                name: id
+                type: BIGINT
+                autoIncrement: true
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column:
+                name: key
+                type: VARCHAR(255)
+                constraints:
+                  nullable: false
+            - column:
+                name: type
+                type: VARCHAR(255)
+                constraints:
+                  nullable: false
+            - column:
+                name: content
+                type: VARCHAR(255)
+                constraints:
+                  nullable: false
