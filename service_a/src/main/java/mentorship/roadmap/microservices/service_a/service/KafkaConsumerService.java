@@ -3,11 +3,11 @@ package mentorship.roadmap.microservices.service_a.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mentorship.roadmap.microservices.service_a.model.entity.KafkaMessage;
 import mentorship.roadmap.microservices.service_a.model.dto.MessageDto;
 import mentorship.roadmap.microservices.service_a.repository.MessageRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -16,20 +16,22 @@ import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaConsumerService {
     private final MessageRepo repository;
     private final WebClient webClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private static final Logger log = LoggerFactory.getLogger(KafkaConsumerService.class);
 
     @KafkaListener(topics = "in")
-    public void listen(String message) {
+    public void listen(ConsumerRecord<String, String> record) {
+        String key = record.key();
+        String value = record.value();
         try {
-            MessageDto dto = objectMapper.readValue(message, MessageDto.class);
+            MessageDto dto = objectMapper.readValue(value, MessageDto.class);
 
             KafkaMessage kafkaMessage = new KafkaMessage();
             kafkaMessage.setType(dto.getType());
-            kafkaMessage.setKey(dto.getKey());
+            kafkaMessage.setKey(key);
             kafkaMessage.setContent(dto.getContent());
             repository.save(kafkaMessage);
             log.info("Сообщение сохранено в MongoDB");

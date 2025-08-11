@@ -1,9 +1,8 @@
 package mentorship.roadmap.microservices.service_b.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import mentorship.roadmap.microservices.service_b.model.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,8 @@ import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MessageService {
-    private static final Logger log = LoggerFactory.getLogger(MessageService.class);
     private final RedisTemplate<String, Object> redisTemplate;
     private final WebClient webClient;
 

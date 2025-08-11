@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: make-key-column-nullable
+      author: vadim
+      changes:
+        - dropNotNullConstraint:
+            tableName: messages_from_service_b
+            columnName: key
+            columnDataType: VARCHAR(255)
